@@ -8,6 +8,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { api } from 'boot/axios';
 import { useGHUser } from 'stores/gh-user';
 import { Loading, QSpinnerGears } from 'quasar';
+import { SessionStorage } from 'quasar';
 
 export default defineComponent({
   name: 'GithubCallbackPage',
@@ -20,30 +21,22 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
 
-    const { code } = route.query;
+    const { code, state } = route.query;
 
-    if (!code) {
+    if (!code || !state || state !== SessionStorage.getItem('state')) {
       router.replace('/');
       return;
     }
 
+    SessionStorage.remove('state');
+
     (async () => {
-      const githubUser = await api.post(
-        '/github',
-        {
-          code,
-        },
-        {
-          headers: {
-            Accept: 'application/json',
-          },
-        }
-      );
+      const body = { code };
+
+      const response = await api.post('/github', body);
 
       const GHUser = useGHUser();
-      GHUser.spread(githubUser.data);
-
-      console.log(githubUser);
+      GHUser.spread(response.data);
 
       router.replace('/dashboard');
     })();

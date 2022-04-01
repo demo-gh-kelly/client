@@ -6,11 +6,9 @@ declare namespace NodeJS {
     VUE_ROUTER_MODE: 'hash' | 'history' | 'abstract' | undefined;
     VUE_ROUTER_BASE: string | undefined;
 
-    GITHUB_OAUTH_GET: string;
-    GITHUB_OAUTH_POST: string;
-    GITHUB_OAUTH_REDIRECT_URI: string;
+    GITHUB_OAUTH_AUTHORIZE: string;
 
-    DEMO_KELLY_CLIENT_ID: string;
-    DEMO_KELLY_CLIENT_SECRET: string;
+    GITHUB_APP_CLIENT_ID: string;
+    GITHUB_APP_CALLBACK_URI: string;
   }
 }
