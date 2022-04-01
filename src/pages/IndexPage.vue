@@ -1,6 +1,9 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <a :href="url"><h1>github</h1></a>
+    <a :href="url"><h2>oauth github</h2></a>
+    <a href="https://github.com/apps/kelly-gh-app"
+      ><h1>Install githubapp</h1></a
+    >
   </q-page>
 </template>
 
