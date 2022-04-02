@@ -36,8 +36,8 @@ interface GHUserState {
 }
 
 export const useGHUser = defineStore('GHUser', {
-  state: () =>
-    ({
+  state: () => ({
+    value: {
       login: '',
       id: null,
       node_id: '',
@@ -70,21 +70,20 @@ export const useGHUser = defineStore('GHUser', {
       following: null,
       created_at: '',
       updated_at: '',
-    } as GHUserState),
+    } as GHUserState,
+  }),
 
   getters: {
     fullname(state) {
-      return state.name;
+      return state.value.name;
     },
     avatarUrl(state) {
-      return state.avatar_url;
+      return state.value.avatar_url;
     },
   },
   actions: {
-    spread(obj: GHUserState) {
-      for (const key in obj) {
-        this[key] = obj[key];
-      }
+    update(obj: GHUserState) {
+      this.value = obj;
     },
   },
 });

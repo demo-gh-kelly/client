@@ -5,10 +5,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { api } from 'boot/axios';
-import { useGHUser } from 'stores/gh-user';
+import { CodeTrasmissionError, StateValidationError, useGH } from 'stores/gh';
 import { Loading, QSpinnerGears } from 'quasar';
-import { SessionStorage } from 'quasar';
 
 export default defineComponent({
   name: 'GithubCallbackPage',
@@ -18,25 +16,25 @@ export default defineComponent({
       spinner: QSpinnerGears,
     });
 
-    const route = useRoute();
     const router = useRouter();
+    const route = useRoute();
+    const GH = useGH();
+    const stateValidationError = GH.validateState(route.query.state as string);
 
-    const { code, state } = route.query;
-
-    if (!code || !state || state !== SessionStorage.getItem('state')) {
+    if (stateValidationError instanceof StateValidationError) {
       router.replace('/');
       return;
     }
 
-    SessionStorage.remove('state');
-
     (async () => {
-      const body = { code };
+      const codeTransmissionError = await GH.sendCodeToServer(
+        route.query.code as string
+      );
 
-      const response = await api.post('/github', body);
-
-      const GHUser = useGHUser();
-      GHUser.spread(response.data);
+      if (codeTransmissionError instanceof CodeTrasmissionError) {
+        router.replace('/');
+        return;
+      }
 
       router.replace('/dashboard');
     })();

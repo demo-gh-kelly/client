@@ -10,12 +10,15 @@
 import { useGHUser } from 'stores/gh-user';
 import { defineComponent } from 'vue';
 import { Loading } from 'quasar';
+import { useGH } from 'src/stores/gh';
 
 export default defineComponent({
   name: 'DashboardPage',
 
   setup() {
     const GHUser = useGHUser();
+    const GH = useGH();
+    GH.retrieveUserAllRepos();
 
     Loading.hide();
 
