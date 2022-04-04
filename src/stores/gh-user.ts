@@ -105,7 +105,7 @@ export const useGHUser = defineStore('GHUser', {
 
     async refresh() {
       const [err, response] = await to(
-        api.get('/installations', { withCredentials: true })
+        api.get('/user', { withCredentials: true })
       );
 
       if (err) {

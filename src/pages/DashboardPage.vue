@@ -22,11 +22,11 @@ export default defineComponent({
     // move this in router
     (async () => {
       await GHUser.refresh();
+
+      await GHRepos.getInstallations();
+
+      Loading.hide();
     })();
-
-    Loading.hide();
-
-    GHRepos.getInstallations();
 
     return {
       fullname: GHUser.fullname,
