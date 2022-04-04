@@ -1,4 +1,6 @@
+import to from 'await-to-js';
 import { defineStore } from 'pinia';
+import { api } from 'src/boot/axios';
 
 export interface GHRepo {
   id: 324551208;
@@ -113,6 +115,18 @@ export const useGHRepos = defineStore('GHRepos', {
   actions: {
     add(...repos: GHRepo[]) {
       this.value.push(...repos);
+    },
+
+    async getInstallations() {
+      const [err, response] = await to(
+        api.get('/installations', { withCredentials: true })
+      );
+
+      if (err) {
+        return new Error();
+      }
+
+      console.log(response);
     },
   },
 });

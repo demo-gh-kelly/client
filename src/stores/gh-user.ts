@@ -1,4 +1,6 @@
+import to from 'await-to-js';
 import { defineStore } from 'pinia';
+import { api } from 'src/boot/axios';
 
 interface GHUserState {
   login: string;
@@ -35,45 +37,58 @@ interface GHUserState {
   updated_at: string;
 }
 
+function makeEmptyValue(): GHUserState {
+  return {
+    login: '',
+    id: null,
+    node_id: '',
+    avatar_url: '',
+    gravatar_id: '',
+    url: '',
+    html_url: '',
+    followers_url: '',
+    following_url: '',
+    gists_url: '',
+    starred_url: '',
+    subscriptions_url: '',
+    organizations_url: '',
+    repos_url: '',
+    events_url: '',
+    received_events_url: '',
+    type: '',
+    site_admin: null,
+    name: '',
+    company: null,
+    blog: '',
+    location: '',
+    email: '',
+    hireable: null,
+    bio: '',
+    twitter_username: '',
+    public_repos: null,
+    public_gists: null,
+    followers: null,
+    following: null,
+    created_at: '',
+    updated_at: '',
+  };
+}
+
 export const useGHUser = defineStore('GHUser', {
-  state: () => ({
-    value: {
-      login: '',
-      id: null,
-      node_id: '',
-      avatar_url: '',
-      gravatar_id: '',
-      url: '',
-      html_url: '',
-      followers_url: '',
-      following_url: '',
-      gists_url: '',
-      starred_url: '',
-      subscriptions_url: '',
-      organizations_url: '',
-      repos_url: '',
-      events_url: '',
-      received_events_url: '',
-      type: '',
-      site_admin: null,
-      name: '',
-      company: null,
-      blog: '',
-      location: '',
-      email: '',
-      hireable: null,
-      bio: '',
-      twitter_username: '',
-      public_repos: null,
-      public_gists: null,
-      followers: null,
-      following: null,
-      created_at: '',
-      updated_at: '',
-    } as GHUserState,
-  }),
+  state: () =>
+    ({
+      updated_at: null,
+      value: makeEmptyValue(),
+    } as {
+      updated_at: Date | null;
+      value: GHUserState;
+    }),
 
   getters: {
+    isFresh(state) {
+      return state.updated_at;
+    },
+
     fullname(state) {
       return state.value.name;
     },
@@ -81,9 +96,23 @@ export const useGHUser = defineStore('GHUser', {
       return state.value.avatar_url;
     },
   },
+
   actions: {
     update(obj: GHUserState) {
       this.value = obj;
+      this.updated_at = new Date();
+    },
+
+    async refresh() {
+      const [err, response] = await to(
+        api.get('/installations', { withCredentials: true })
+      );
+
+      if (err) {
+        return new Error(); // kick out
+      }
+
+      this.update(response!.data);
     },
   },
 });

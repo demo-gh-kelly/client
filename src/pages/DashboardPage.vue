@@ -8,6 +8,7 @@
 
 <script lang="ts">
 import { useGHUser } from 'stores/gh-user';
+import { useGHRepos } from 'src/stores/gh-repos';
 import { defineComponent } from 'vue';
 import { Loading } from 'quasar';
 
@@ -16,8 +17,16 @@ export default defineComponent({
 
   setup() {
     const GHUser = useGHUser();
+    const GHRepos = useGHRepos();
+
+    // move this in router
+    (async () => {
+      await GHUser.refresh();
+    })();
 
     Loading.hide();
+
+    GHRepos.getInstallations();
 
     return {
       fullname: GHUser.fullname,

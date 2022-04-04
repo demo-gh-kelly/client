@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { api } from 'boot/axios';
 import { useGHUser } from 'stores/gh-user';
 import { SessionStorage } from 'quasar';
-import { useGHRepos } from './gh-repos';
 import to from 'await-to-js';
 
 abstract class GHError extends Error {}

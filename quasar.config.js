@@ -80,9 +80,14 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
-      // https: true
+      https: true,
       open: true, // opens browser window automatically
     },
+
+    /**
+     * for prod:
+     * quasar serve --port 443 --hostname pharmacyinformatics.local --history --https -K …/…/src/tls/pharmacyinformatics.local.key.pem -C …/…/src/tls/pharmacyinformatics.local.crt.pem -o
+     */
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
