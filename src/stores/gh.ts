@@ -3,6 +3,7 @@ import { api } from 'boot/axios';
 import { useGHUser } from 'stores/gh-user';
 import { SessionStorage } from 'quasar';
 import { useGHRepos } from './gh-repos';
+import to from 'await-to-js';
 
 abstract class GHError extends Error {}
 
@@ -34,32 +35,17 @@ export const useGH = defineStore('GH', {
       return null;
     },
 
-    async sendCodeToServer(code: string): Promise<CodeTrasmissionError | null> {
+    async authenticate(code: string): Promise<CodeTrasmissionError | null> {
       const body = { code };
 
-      const response = await api.post('/github', body);
-      if (false /** add await-to-js, handle err */) {
+      const [err, response] = await to(api.post('/github', body));
+      if (err) {
         return new CodeTrasmissionError();
       }
 
-      const GHUser = useGHUser();
-      GHUser.update(response.data);
+      useGHUser().update(response.data.user);
 
       return null;
-    },
-
-    async retrieveUserAllRepos() {
-      const GHUser = useGHUser();
-      const GHRepos = useGHRepos();
-
-      const body = { login: GHUser.value.login };
-
-      const response = await api.post('/github/repos', body);
-      if (false /** add await-to-js, handle err */) {
-        return new RetrieveRepoError();
-      }
-
-      GHRepos.add(response.data);
     },
   },
 });

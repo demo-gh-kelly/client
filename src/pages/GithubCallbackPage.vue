@@ -27,16 +27,19 @@ export default defineComponent({
     }
 
     (async () => {
-      const codeTransmissionError = await GH.sendCodeToServer(
+      const codeTransmissionError = await GH.authenticate(
         route.query.code as string
       );
+
+      if (codeTransmissionError == null) {
+        router.replace('/dashboard');
+        return;
+      }
 
       if (codeTransmissionError instanceof CodeTrasmissionError) {
         router.replace('/');
         return;
       }
-
-      router.replace('/dashboard');
     })();
   },
 });
