@@ -117,6 +117,18 @@ export const useGHRepos = defineStore('GHRepos', {
       this.value.push(...repos);
     },
 
+    async getRepos() {
+      const [err, response] = await to(
+        api.get('/repos', { withCredentials: true })
+      );
+
+      if (err) {
+        return new Error();
+      }
+
+      console.log(response);
+    },
+
     async getInstallations() {
       const [err, response] = await to(
         api.get('/installations', { withCredentials: true })

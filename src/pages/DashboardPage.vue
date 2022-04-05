@@ -23,6 +23,7 @@ export default defineComponent({
     (async () => {
       await GHUser.refresh();
 
+      await GHRepos.getRepos();
       await GHRepos.getInstallations();
 
       Loading.hide();
