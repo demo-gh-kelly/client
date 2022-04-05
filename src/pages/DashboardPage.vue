@@ -9,7 +9,7 @@
 <script lang="ts">
 import { useGHUser } from 'stores/gh-user';
 import { useGHRepos } from 'src/stores/gh-repos';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 import { Loading } from 'quasar';
 
 export default defineComponent({
@@ -29,8 +29,8 @@ export default defineComponent({
     })();
 
     return {
-      fullname: GHUser.fullname,
-      avatar: GHUser.avatarUrl,
+      fullname: computed(() => GHUser.fullname),
+      avatar: computed(() => GHUser.avatarUrl),
     };
   },
 });

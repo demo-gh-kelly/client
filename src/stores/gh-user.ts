@@ -112,7 +112,7 @@ export const useGHUser = defineStore('GHUser', {
         return new Error(); // kick out
       }
 
-      this.update(response!.data);
+      this.update(response!.data.user);
     },
   },
 });
