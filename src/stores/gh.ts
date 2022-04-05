@@ -37,7 +37,9 @@ export const useGH = defineStore('GH', {
     async authenticate(code: string): Promise<CodeTrasmissionError | null> {
       const body = { code };
 
-      const [err, response] = await to(api.post('/github', body));
+      const [err, response] = await to(
+        api.post('/github', body, { withCredentials: true })
+      );
       if (err) {
         return new CodeTrasmissionError();
       }
