@@ -1,8 +1,24 @@
 <template>
   <q-page class="column items-center justify-evenly">
-    <h1>dashboard</h1>
-    <p>{{ fullname }}</p>
-    <img :src="avatar" :alt="fullname" />
+    <h6>{{ fullname }}</h6>
+    <!-- <img :src="avatar" :alt="fullname" /> -->
+
+    repos: {{ reposQuantity }}
+
+    <q-list>
+      <template v-for="repo in repos" :key="repo.id">
+        <q-item>
+          <q-item-section>
+            <q-item-label>{{ repo.name }}</q-item-label>
+          </q-item-section>
+
+          <q-item-section side top>
+            <q-icon name="star" color="yellow" />
+          </q-item-section>
+        </q-item>
+        <q-separator spaced inset />
+      </template>
+    </q-list>
   </q-page>
 </template>
 
@@ -22,16 +38,19 @@ export default defineComponent({
     // move this in router
     (async () => {
       await GHUser.refresh();
-
-      await GHRepos.getRepos();
-      await GHRepos.getInstallations();
-
       Loading.hide();
+
+      await Promise.allSettled([
+        GHRepos.getRepos(),
+        GHRepos.getInstallations(),
+      ]);
     })();
 
     return {
       fullname: computed(() => GHUser.fullname),
       avatar: computed(() => GHUser.avatarUrl),
+      reposQuantity: computed(() => GHRepos.quantity),
+      repos: computed(() => GHRepos.repos),
     };
   },
 });

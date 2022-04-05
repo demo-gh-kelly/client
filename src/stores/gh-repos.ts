@@ -110,6 +110,10 @@ export const useGHRepos = defineStore('GHRepos', {
     quantity(state) {
       return state.value.length;
     },
+
+    repos(state) {
+      return state.value;
+    },
   },
 
   actions: {
@@ -126,7 +130,7 @@ export const useGHRepos = defineStore('GHRepos', {
         return new Error();
       }
 
-      console.log(response);
+      this.add(...response.data.repos);
     },
 
     async getInstallations() {
@@ -137,8 +141,6 @@ export const useGHRepos = defineStore('GHRepos', {
       if (err) {
         return new Error();
       }
-
-      console.log(response);
     },
   },
 });
