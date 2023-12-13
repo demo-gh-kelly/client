@@ -14,7 +14,7 @@ npm install
 
 ```bash
 quasar dev
-```
+```csa
 
 ### Lint the files
 
