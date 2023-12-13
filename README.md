@@ -17,7 +17,7 @@ quasar dev
 ```
 
 ### Lint the files
-
+csa
 ```bash
 yarn lint
 # or
