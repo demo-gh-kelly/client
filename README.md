@@ -2,7 +2,7 @@
 
 A Quasar Project
 
-## Install the dependencies
+## Install the dependenciescsa
 
 ```bash
 yarn
